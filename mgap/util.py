@@ -1,5 +1,17 @@
 def get_config():
     return {
+        'aws': {
+            'profile_name': ''
+        },
+        'iiif': {
+            'image_api_default_params': {
+                'region': 'full',
+                'size': 'full',
+                'rotation': '0',
+                'quality': 'default',
+                'format': 'jpg'
+            }
+        },
         'rabbitmq': {
             'username': 'guest',
             'password': '',

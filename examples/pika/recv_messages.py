@@ -8,7 +8,8 @@ from mgap.mgap import MGAP
 from mgap.util import get_config
 
 
-rabbitmq_config = get_config()['rabbitmq']
+config = get_config()
+rabbitmq_config = config['rabbitmq']
 
 credentials = pika.credentials.PlainCredentials(
     rabbitmq_config['username'],
@@ -24,10 +25,12 @@ channel = connection.channel()
 
 channel.queue_declare(queue='iiif_image')
 
-pipeline = MGAP()
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
-    pipeline.send(json.loads(body.decode()))
+    parsed_message = json.loads(body.decode())
+
+    pipeline = MGAP(config, parsed_message)
+    pipeline.send(parsed_message)
 
 channel.basic_consume(callback, queue='iiif_image', no_ack=True)
 
