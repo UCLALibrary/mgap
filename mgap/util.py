@@ -3,6 +3,9 @@ def get_config():
         'aws': {
             'profile_name': ''
         },
+        'clarifai': {
+            'api_key': ''
+        },
         'iiif': {
             'image_api_default_params': {
                 'region': 'full',

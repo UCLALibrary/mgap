@@ -19,7 +19,10 @@ class MGAP:
         # FIXME
         self.pipeline = chain(
             get_image_url.s(config) |
-            send_to_amazon_rekognition.s(config, message)
+            group(
+                send_to_amazon_rekognition.s(config, message),
+                send_to_clarifai.s(config, message)
+            )
         )
 
     def send(self, x):

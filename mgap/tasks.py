@@ -3,6 +3,7 @@ from urllib.parse import urlparse, unquote
 from arrow import now
 from boto3 import Session as BotoSession
 from botocore.client import Config as BotoConfig
+from clarifai.rest import ClarifaiApp
 from iiif.request import IIIFRequest
 from requests import get
 
@@ -47,5 +48,28 @@ def send_to_amazon_rekognition(image_url, config, message):
     return {
         'results': amazon_rekognition_response,
         'vendor': 'amazon_rekognition',
+        'timestamp': timestamp
+    }
+
+@app.task
+def send_to_clarifai(image_url, config, message):
+    '''Sends an image to Clarifai.
+
+    Args:
+        image_url: The URL of the image to send to Clarifai.
+
+    Returns:
+        A dictionary containing the response payload from the computer vision
+        service, a vendor identifier, and a timestamp.
+    '''
+
+    clarifai_client = ClarifaiApp(api_key=config['clarifai']['api_key'])
+    clarifai_model = clarifai_client.public_models.general_model
+    timestamp = now('US/Pacific').isoformat()
+    clarifai_response = clarifai_model.predict_by_url(url=image_url)
+
+    return {
+        'results': clarifai_response,
+        'vendor': 'clarifai',
         'timestamp': timestamp
     }
