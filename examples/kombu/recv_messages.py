@@ -8,7 +8,8 @@ from mgap.mgap import MGAP
 from mgap.util import get_config
 
 
-rabbitmq_config = get_config()['rabbitmq']
+config = get_config()
+rabbitmq_config = config['rabbitmq']
 
 broker_url = 'amqp://{}:{}@{}:{}/{}'.format(
     rabbitmq_config['username'],
@@ -21,11 +22,12 @@ broker_url = 'amqp://{}:{}@{}:{}/{}'.format(
 media_exchange = Exchange('', 'direct', durable=False)
 iiif_image_queue = Queue('iiif_image', exchange=media_exchange, durable=False, routing_key='iiif_image')
 
-pipeline = MGAP()
-
 def process_iiif_image(body, message):
     print(" [x] Received %r" % body)
-    pipeline.send(json.loads(body))
+    parsed_message = json.loads(body)
+
+    pipeline = MGAP(config, parsed_message)
+    pipeline.send(parsed_message)
     message.ack()
 
 try:

@@ -2,17 +2,24 @@ from celery import chain, group
 
 from .tasks import *
 
+
 class MGAP:
-    def __init__(self):
-        '''Creates a partial that is invoked for each image.'''
+    def __init__(self, config, message):
+        '''Creates a partial that is invoked for each message.
+
+        Args:
+            config: The return value of `mgap.util.get_config`. It is
+                explicitly passed to every task in the pipeline, so that they
+                can easily reference it.
+            message: The body of the message representing a processing job. It
+                is explicitly passed to every task in the pipeline EXCEPT for
+                the first one (to which it is passed implicitly by `send`).
+        '''
 
         # FIXME
-        self.pipeline = group(
-            chain(
-                noop.s() |
-                noop.s()
-            ),
-            noop.s()
+        self.pipeline = chain(
+            get_image_url.s(config) |
+            send_to_amazon_rekognition.s(config, message)
         )
 
     def send(self, x):

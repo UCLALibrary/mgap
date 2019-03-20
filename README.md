@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. Install Python 3 and a virtual environment manager.
+1. Install Python 3, AWS CLI, and a virtual environment manager.
 2. Download and extract this repository.
 3. In the repository directory, create and activate a virtual environment.
 4. Install dependencies:
@@ -11,7 +11,8 @@
     $ pip install -r requirements.txt
     ```
 
-5. Replace the dummy configuration data in `mgap.util.get_config`.
+5. Configure an AWS CLI profile with access tokens for Amazon Rekognition.
+6. Replace the dummy configuration data in `mgap.util.get_config`.
 
 ## Usage
 
@@ -38,6 +39,6 @@
     c. In the third, pipe some JSON to the example send script:
 
     ```bash
-    $ echo '{ "Hello": "world!" }' | ./send_messages.py
+    $ echo '{ "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979", "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest", "item_ark": "" }' | ./send_messages.py
     ```
 
