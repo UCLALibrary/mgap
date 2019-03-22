@@ -1,3 +1,4 @@
+import json
 from urllib.parse import urlparse, unquote
 
 from arrow import now
@@ -5,6 +6,7 @@ from boto3 import Session as BotoSession
 from botocore.client import Config as BotoConfig
 from clarifai.rest import ClarifaiApp
 from iiif.request import IIIFRequest
+from redis import Redis
 from requests import get
 
 from .celery import app
@@ -73,3 +75,27 @@ def send_to_clarifai(image_url, config, message):
         'vendor': 'clarifai',
         'timestamp': timestamp
     }
+
+@app.task
+def save_to_redis(computer_vision_results, config, message):
+    '''Saves computer vision results to Redis as JSON.
+
+    Args:
+        computer_vision_results: A dictionary containing the response payload
+            from the computer vision service, a vendor identifier, and a
+            timestamp.
+
+    Returns:
+        The key under which the results were stored in Redis.
+    '''
+
+    redis_instance = Redis(
+        host=config['redis']['host'],
+        port=config['redis']['port'],
+        db=config['redis']['db']
+    )
+    redis_key = message['iiif_image_info_url'] + '-' + computer_vision_results['vendor']
+    redis_value = json.dumps({**message, **computer_vision_results})
+
+    redis_instance.set(redis_key, redis_value)
+    return redis_key
