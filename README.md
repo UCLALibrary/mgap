@@ -12,7 +12,8 @@
     ```
 
 5. Configure an AWS CLI profile with access tokens for Amazon Rekognition.
-6. Replace the dummy configuration data in `mgap.util.get_config`.
+6. Obtain an API key for Clarifai.
+7. Replace the dummy configuration data in `mgap.util.get_config`.
 
 ## Usage
 
