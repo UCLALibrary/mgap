@@ -15,6 +15,14 @@
 6. Obtain an API key for Clarifai.
 7. Replace the dummy configuration data in `mgap.util.get_config`.
 
+## Testing
+
+At the project root directory, run:
+
+```bash
+$ pytest
+```
+
 ## Usage
 
 1. Move the example client scripts to the repository directory, so they can find the `mgap` package as an absolute import:

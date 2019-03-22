@@ -4,4 +4,5 @@ celery==4.2.1
 clarifai==2.6.1
 iiif==1.0.6
 pika==0.13.0
+pytest==4.3.1
 requests==2.21.0
