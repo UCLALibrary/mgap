@@ -21,5 +21,10 @@ def get_config():
             'host': 'localhost',
             'port': 5672,
             'vhost': ''
+        },
+        'redis': {
+            'host': 'localhost',
+            'port': 6379,
+            'db': 0
         }
     }

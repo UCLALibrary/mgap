@@ -20,8 +20,14 @@ class MGAP:
         self.pipeline = chain(
             get_image_url.s(config) |
             group(
-                send_to_amazon_rekognition.s(config, message),
-                send_to_clarifai.s(config, message)
+                chain(
+                    send_to_amazon_rekognition.s(config, message),
+                    save_to_redis.s(config, message)
+                ),
+                chain(
+                    send_to_clarifai.s(config, message),
+                    save_to_redis.s(config, message)
+                )
             )
         )
 
