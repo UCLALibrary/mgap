@@ -1,0 +1,215 @@
+{
+    "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979",
+    "item_ark": "",
+    "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest",
+    "results": {
+        "Labels": [
+            {
+                "Name": "Human",
+                "Confidence": 98,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Person",
+                "Confidence": 98,
+                "Instances": [
+                    {
+                        "BoundingBox": {
+                            "Width": 0.4272250235080719,
+                            "Height": 0.48101863265037537,
+                            "Left": 0.3784177005290985,
+                            "Top": 0.5015656352043152
+                        },
+                        "Confidence": 98
+                    },
+                    {
+                        "BoundingBox": {
+                            "Width": 0.37340784072875977,
+                            "Height": 0.6078534722328186,
+                            "Left": 0.2931646704673767,
+                            "Top": 0.3140558898448944
+                        },
+                        "Confidence": 98
+                    }
+                ],
+                "Parents": []
+            },
+            {
+                "Name": "Electronics",
+                "Confidence": 98,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Monitor",
+                "Confidence": 98,
+                "Instances": [
+                    {
+                        "BoundingBox": {
+                            "Width": 0.13718071579933167,
+                            "Height": 0.17882294952869415,
+                            "Left": 0.007187902927398682,
+                            "Top": 0.5765016078948975
+                        },
+                        "Confidence": 98
+                    },
+                    {
+                        "BoundingBox": {
+                            "Width": 0.17573420703411102,
+                            "Height": 0.3291837275028229,
+                            "Left": 0.0007620275137014687,
+                            "Top": 0.17985454201698303
+                        },
+                        "Confidence": 84
+                    }
+                ],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    },
+                    {
+                        "Name": "Screen"
+                    }
+                ]
+            },
+            {
+                "Name": "Display",
+                "Confidence": 98,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    },
+                    {
+                        "Name": "Screen"
+                    }
+                ]
+            },
+            {
+                "Name": "Screen",
+                "Confidence": 98,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    }
+                ]
+            },
+            {
+                "Name": "Studio",
+                "Confidence": 81,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Indoors",
+                "Confidence": 79,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Interior Design",
+                "Confidence": 79,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Indoors"
+                    }
+                ]
+            },
+            {
+                "Name": "Furniture",
+                "Confidence": 76,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Table",
+                "Confidence": 74,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Furniture"
+                    }
+                ]
+            },
+            {
+                "Name": "Entertainment Center",
+                "Confidence": 70,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    }
+                ]
+            },
+            {
+                "Name": "Room",
+                "Confidence": 66,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Indoors"
+                    }
+                ]
+            },
+            {
+                "Name": "Camera",
+                "Confidence": 63,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    }
+                ]
+            },
+            {
+                "Name": "Video Camera",
+                "Confidence": 63,
+                "Instances": [],
+                "Parents": [
+                    {
+                        "Name": "Electronics"
+                    },
+                    {
+                        "Name": "Camera"
+                    }
+                ]
+            },
+            {
+                "Name": "Workshop",
+                "Confidence": 57,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Tripod",
+                "Confidence": 57,
+                "Instances": [],
+                "Parents": []
+            },
+            {
+                "Name": "Clinic",
+                "Confidence": 55,
+                "Instances": [],
+                "Parents": []
+            }
+        ],
+        "LabelModelVersion": "2.0",
+        "ResponseMetadata": {
+            "RequestId": "00000000-0000-0000-0000-000000000000",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Mon, 08 Apr 2019 00:00:01 GMT",
+                "x-amzn-requestid": "00000000-0000-0000-0000-000000000000",
+                "content-length": "2333",
+                "connection": "keep-alive"
+            },
+            "RetryAttempts": 0
+        }
+    },
+    "vendor": "amazon_rekognition",
+    "timestamp": "2019-04-08T00:00:00.000000-07:00"
+}
