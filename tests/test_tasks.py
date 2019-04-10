@@ -1,7 +1,7 @@
 '''Tests for each Celery task.'''
 
 import pytest
-from json import load
+from json import load, loads
 import urllib
 
 import mgap.tasks, mgap.util
@@ -23,6 +23,15 @@ def messages():
             ret[x] = load(message_file)
     return ret
 
+@pytest.fixture(scope='module')
+def computer_vision_results():
+    '''Returns a dictionary representing the return value of mgap.tasks.collect_computer_vision_results.'''
+    ret = {}
+    for x in ['amazon_rekognition', 'clarifai']:
+        with open('tests/fixtures/{}_results.json'.format(x), 'r') as computer_vision_results_file:
+            ret[x] = load(computer_vision_results_file)
+    return ret
+
 # --- TESTS --- #
 
 def test_get_image_url(messages, mgap_config):
@@ -32,3 +41,17 @@ def test_get_image_url(messages, mgap_config):
     # FIXME: use a more specific exception
     with pytest.raises(Exception):
         mgap.tasks.get_image_url(messages['invalid'], mgap_config)
+
+def test_construct_annotation(computer_vision_results, messages, mgap_config):
+    anno = mgap.tasks.construct_annotation(computer_vision_results, mgap_config, messages['valid'])
+    anno_body = anno['body']
+
+    # Annotation body is a non-empty list.
+    assert type(anno_body) is list and len(anno_body) > 0
+
+    # Body values are serialized JSON arrays of strings.
+    for body in anno_body:
+        body_value = loads(body['value'])
+        assert type(body_value) is list and len(body_value) > 0
+        for element in body_value:
+            assert type(element) is str

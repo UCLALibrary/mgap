@@ -16,9 +16,10 @@ class MGAP:
                 the first one (to which it is passed implicitly by `send`).
         '''
 
+        # Don't forget .s() !!!
         # FIXME
         self.pipeline = chain(
-            get_image_url.s(config) |
+            get_image_url.s(config),
             group(
                 chain(
                     send_to_amazon_rekognition.s(config, message),
@@ -28,7 +29,9 @@ class MGAP:
                     send_to_clarifai.s(config, message),
                     save_to_redis.s(config, message)
                 )
-            )
+            ),
+            collect_computer_vision_results.s(config, message),
+            construct_annotation.s(config, message)
         )
 
     def send(self, x):
