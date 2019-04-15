@@ -1,3 +1,4 @@
+import copy
 import json
 from urllib.parse import urlparse, unquote
 
@@ -144,7 +145,7 @@ def construct_annotation(computer_vision_results, config, message):
 
     # Each annotation has multiple bodies, one for each CV service result.
     for k, v in computer_vision_results.items():
-        anno_body = anno_body_seed
+        anno_body = copy.deepcopy(anno_body_seed)
         if v['vendor'] == 'amazon_rekognition':
             image_tags = list(map(
                 lambda x: x['Name'],
