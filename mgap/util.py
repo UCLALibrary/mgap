@@ -6,6 +6,16 @@ def get_config():
         'clarifai': {
             'api_key': ''
         },
+        'elucidate': {
+            'host': 'http://localhost',
+            'port': 8080,
+            'base_path': '/annotation',
+            'annotation_model': 'w3c',
+            'request_headers_seed': {
+                'Accept': 'application/ld+json;profile="http://www.w3.org/ns/anno.jsonld"',
+                'Content-Type': 'application/ld+json'
+            }
+        },
         'iiif': {
             'image_api_default_params': {
                 'region': 'full',
@@ -63,6 +73,10 @@ def get_config():
                 'generator': {
                     'type': 'Software'
                 }
+            },
+            'annotation_container_seed': {
+                '@context': 'http://www.w3.org/ns/anno.jsonld',
+                'type': 'AnnotationCollection'
             }
         }
     }

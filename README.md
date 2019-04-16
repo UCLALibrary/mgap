@@ -48,6 +48,6 @@ $ pytest
     c. In the third, pipe some JSON to the example send script:
 
     ```bash
-    $ echo '{ "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979", "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest", "item_ark": "" }' | ./send_messages.py
+    $ echo '{ "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979", "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest", "item_ark": "ark:/00000/aaa.bbb" }' | ./send_messages.py
     ```
 
