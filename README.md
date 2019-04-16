@@ -13,7 +13,14 @@
 
 5. Configure an AWS CLI profile with access tokens for Amazon Rekognition.
 6. Obtain an API key for Clarifai.
-7. Replace the dummy configuration data in `mgap.util.get_config`.
+7. Stand up and configure instances of the following:
+
+    - [IIIF](https://iiif.io) image server
+    - [Elucidate](https://github.com/dlcs/elucidate-server) WebAnnotation server
+    - RabbitMQ
+    - Redis
+
+8. Replace the dummy configuration data in `mgap.util.get_config`.
 
 ## Testing
 
