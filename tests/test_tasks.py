@@ -49,8 +49,13 @@ def test_construct_annotation(computer_vision_results, messages, mgap_config):
     # Annotation body is a non-empty list.
     assert type(anno_body) is list and len(anno_body) > 0
 
-    # Body values are serialized JSON arrays of strings.
-    for body in anno_body:
+    # Bodies are unique.
+    for index, body in enumerate(anno_body):
+        for index_2, body_2 in enumerate(anno_body):
+            if index != index_2:
+                assert body != body_2
+
+        # Body values are serialized JSON arrays of strings.
         body_value = loads(body['value'])
         assert type(body_value) is list and len(body_value) > 0
         for element in body_value:

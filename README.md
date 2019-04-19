@@ -13,7 +13,14 @@
 
 5. Configure an AWS CLI profile with access tokens for Amazon Rekognition.
 6. Obtain an API key for Clarifai.
-7. Replace the dummy configuration data in `mgap.util.get_config`.
+7. Stand up and configure instances of the following:
+
+    - [IIIF](https://iiif.io) image server
+    - [Elucidate](https://github.com/dlcs/elucidate-server) WebAnnotation server
+    - RabbitMQ
+    - Redis
+
+8. Replace the dummy configuration data in `mgap.util.get_config`.
 
 ## Testing
 
@@ -48,6 +55,6 @@ $ pytest
     c. In the third, pipe some JSON to the example send script:
 
     ```bash
-    $ echo '{ "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979", "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest", "item_ark": "" }' | ./send_messages.py
+    $ echo '{ "iiif_image_info_url": "https://stacks.stanford.edu/image/iiif/gp903kf9548%2FSC1041_SAIL_Office_1979", "iiif_manifest_url": "https://purl.stanford.edu/gp903kf9548/iiif/manifest", "item_ark": "ark:/00000/aaa.bbb" }' | ./send_messages.py
     ```
 

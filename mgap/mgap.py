@@ -31,7 +31,8 @@ class MGAP:
                 )
             ),
             collect_computer_vision_results.s(config, message),
-            construct_annotation.s(config, message)
+            construct_annotation.s(config, message),
+            save_to_elucidate.s(config, message)
         )
 
     def send(self, x):
