@@ -28,7 +28,12 @@ class MGAP:
                 chain(
                     send_to_clarifai.s(config, message),
                     save_to_redis.s(config, message)
+                ),
+                chain(
+                    send_to_google_vision.s(config, message),
+                    save_to_redis.s(config, message)
                 )
+
             ),
             collect_computer_vision_results.s(config, message),
             construct_annotation.s(config, message),

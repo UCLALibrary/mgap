@@ -4,6 +4,7 @@ import json
 from urllib.parse import quote, unquote, urlparse
 
 from arrow import now
+from base64 import b64encode
 from boto3 import Session as BotoSession
 from botocore.client import Config as BotoConfig
 from clarifai.rest import ClarifaiApp
@@ -75,6 +76,45 @@ def send_to_clarifai(image_url, config, message):
     return {
         'results': clarifai_response,
         'vendor': 'clarifai',
+        'timestamp': timestamp
+    }
+
+@app.task
+def send_to_google_vision(image_url, config, message):
+    '''Sends an image to Google Vision service.
+
+    Args:
+        image_url: The URL of the image to send to Google.
+
+    Returns:
+        A dictionary containing the response payload from the computer vision
+        service, a vendor identifier, and a timestamp.
+    '''
+    ENDPOINT_URL = 'https://vision.googleapis.com/v1/images:annotate'
+    api_key = config['google_vision']['api_key']
+    img_request = []
+
+    ctxt = b64encode(get(image_url).content).decode()
+    img_request.append({
+        'image': {'content': ctxt},
+        'features': [{
+                        'type': 'IMAGE_PROPERTIES',
+                        'maxResults': 1
+                    }]
+        })
+
+    json_data = json.dumps({"requests": img_request }).encode()
+    timestamp = now('US/Pacific').isoformat()
+    google_response = post(ENDPOINT_URL,
+                    data=json_data,
+                    params={'key': api_key},
+                    headers={'Content-Type': 'application/json'})
+
+    google_json = google_response.json()['responses']
+
+    return {
+        'results': google_json,
+        'vendor': 'google_vision',
         'timestamp': timestamp
     }
 
@@ -162,6 +202,9 @@ def construct_annotation(computer_vision_results, config, message):
             ))
             cv_service_name = 'Clarifai Predict'
             cv_service_homepage = 'https://www.clarifai.com/predict'
+        
+        elif v['vendor'] == 'google_vision':
+            continue
 
         anno_body['value'] = json.dumps(image_tags)
 

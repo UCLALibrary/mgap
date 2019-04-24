@@ -16,6 +16,9 @@ def get_config():
                 'Content-Type': 'application/ld+json'
             }
         },
+        'google_vision': {
+            'api_key': ''
+        },
         'iiif': {
             'image_api_default_params': {
                 'region': 'full',
