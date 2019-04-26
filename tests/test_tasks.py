@@ -27,7 +27,7 @@ def messages():
 def computer_vision_results():
     '''Returns a dictionary representing the return value of mgap.tasks.collect_computer_vision_results.'''
     ret = {}
-    for x in ['amazon_rekognition', 'clarifai']:
+    for x in ['amazon_rekognition', 'clarifai', 'google_vision']:
         with open('tests/fixtures/{}_results.json'.format(x), 'r') as computer_vision_results_file:
             ret[x] = load(computer_vision_results_file)
     return ret
