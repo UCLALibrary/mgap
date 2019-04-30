@@ -98,8 +98,8 @@ def send_to_google_vision(image_url, config, message):
     img_request.append({
         'image': {'content': ctxt},
         'features': [{
-                        'type': 'IMAGE_PROPERTIES',
-                        'maxResults': 1
+                        'type': 'OBJECT_LOCALIZATION',
+                        'maxResults': 50
                     }]
         })
 
@@ -204,7 +204,12 @@ def construct_annotation(computer_vision_results, config, message):
             cv_service_homepage = 'https://www.clarifai.com/predict'
         
         elif v['vendor'] == 'google_vision':
-            continue
+            image_tags = list(map(
+                lambda x: x['name'],
+                v['results'][0]['localizedObjectAnnotations']
+            ))
+            cv_service_name = 'Google Computer Vision'
+            cv_service_homepage = 'https://cloud.google.com/vision/'
 
         anno_body['value'] = json.dumps(image_tags)
 
