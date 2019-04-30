@@ -1,4 +1,6 @@
 # Machine Generated Annotations Pipeline
+[![Build Status](https://travis-ci.org/UCLALibrary/mgap.svg?branch=master)](https://travis-ci.org/UCLALibrary/mgap)
+
 
 ## Installation
 
@@ -39,7 +41,7 @@ $ pytest
 
 ### Terminal 2
 
-1. Install Python 3.4, 3.5, or 3.6, and a Python virtual environment manager.
+1. Install Python 3.5, or 3.6, and a Python virtual environment manager.
 2. In the repository directory, create and activate a virtual environment:
 
     ```bash
