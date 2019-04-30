@@ -1,7 +1,7 @@
 def get_config():
     return {
         'aws': {
-            'profile_name': ''
+            'profile_name': 'mgap'
         },
         'clarifai': {
             'api_key': ''
@@ -36,7 +36,7 @@ def get_config():
             'vhost': ''
         },
         'redis': {
-            'host': 'localhost',
+            'host': 'redis',
             'port': 6379,
             'db': {
                 'computer_vision_results': '0',
