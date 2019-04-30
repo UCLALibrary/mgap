@@ -1,0 +1,21 @@
+version: "3"
+services:
+  celery_worker:
+    build:
+      context: .
+      args:
+        - "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+        - "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+        - "AWS_REGION=${AWS_REGION}"
+    image: mgap_celery_worker:latest
+  recv_messages:
+    build:
+      context: .
+      dockerfile: ./examples/pika/Dockerfile
+      args:
+        - "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+        - "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+        - "AWS_REGION=${AWS_REGION}"
+    image: mgap_recv_messages:latest
+  redis:
+    image: redis
