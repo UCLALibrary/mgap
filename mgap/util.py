@@ -43,6 +43,12 @@ def get_config():
                 'celery_task_results': '1'
             }
         },
+        'solr': {
+            'indexes': {
+                'combined': 'http://localhost:8983/solr/combined'
+            },
+            'tags_field': 'tags_ssim'
+        },
         'web_annotation': {
             'annotation_seed': {
                 '@context': 'http://www.w3.org/ns/anno.jsonld',

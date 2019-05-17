@@ -9,6 +9,7 @@
 3. Obtain access to Amazon Rekognition and Clarifai.
 4. Stand up and configure instances of the following:
 
+    - [Blacklight](http://projectblacklight.org) (at least one instance)
     - [IIIF](https://iiif.io) image server
     - [Elucidate](https://github.com/dlcs/elucidate-server) WebAnnotation server
     - RabbitMQ

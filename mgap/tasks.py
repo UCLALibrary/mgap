@@ -1,3 +1,4 @@
+from collections import Counter
 import copy
 import hashlib
 import json
@@ -9,6 +10,7 @@ from boto3 import Session as BotoSession
 from botocore.client import Config as BotoConfig
 from clarifai.rest import ClarifaiApp
 from iiif.request import IIIFRequest
+from pysolr import Solr
 from redis import Redis
 from requests import get, head, post, put
 
@@ -290,3 +292,67 @@ def save_to_elucidate(annotation, config, message):
             data=json.dumps(annotation, indent=4, sort_keys=True)
         )
     return annotation_url
+
+@app.task
+def save_to_blacklight_solr(computer_vision_results, config, message):
+    '''Creates or updates the tags field on a image's Solr doc in each index.
+
+    Args:
+        computer_vision_results: A dictionary representation of the computer
+        vision results.
+
+    Returns:
+        None
+    '''
+    # Update each Solr index with their respective tags, and the combined index with a concatenated, de-duped list of the tags.
+    tags_field = config['solr']['tags_field']
+
+    # Get the Solr id by transforming the reversed item ARK.
+    solr_identifier = '-'.join(list(map(lambda x: x[::-1], message['item_ark'].split('/')))[1:][::-1])
+
+    # Build up a list of combined image
+    all_image_tags = []
+
+    for k, v in computer_vision_results.items():
+
+        # TODO: abstract this repeated code between here and `construct_annotation`
+        if v['vendor'] == 'amazon_rekognition':
+            image_tags = list(map(
+                lambda x: x['Name'],
+                v['results']['Labels']
+            ))
+
+        elif v['vendor'] == 'clarifai':
+            image_tags = list(map(
+                lambda x: x['name'],
+                v['results']['outputs'][0]['data']['concepts']
+            ))
+
+        elif v['vendor'] == 'google_vision':
+            image_tags = list(map(
+                lambda x: x['name'],
+                v['results'][0]['localizedObjectAnnotations']
+            ))
+
+        # If we're pointing to a service-specific index, write to it.
+        index_name = v['vendor']
+        if index_name in config['solr']['indexes']:
+            solr_client = Solr(config['solr']['indexes'][index_name], always_commit=True)
+            solr_doc = {
+                'id': solr_identifier,
+                tags_field: image_tags
+            }
+            solr_client.add([solr_doc], commitWithin='1000', fieldUpdates={tags_field: 'set'}, overwrite=True)
+
+        all_image_tags += image_tags
+
+    # Write a combined list of tags to the combined index (all computer vision services).
+    # TODO: the following code is mostly repeated; bad!
+    index_name = 'combined'
+    if index_name in config['solr']['indexes']:
+        solr_client = Solr(config['solr']['indexes'][index_name], always_commit=True)
+        solr_doc = {
+            'id': solr_identifier,
+            tags_field: list(Counter(all_image_tags))
+        }
+        solr_client.add([solr_doc], commitWithin='1000', fieldUpdates={tags_field: 'set'}, overwrite=True)
