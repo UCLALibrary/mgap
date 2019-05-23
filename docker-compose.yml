@@ -19,3 +19,6 @@ services:
     image: mgap_recv_messages:latest
   redis:
     image: redis
+    volumes:
+      - "/home/docker/data:/data"
+    command: redis-server --appendonly yes
