@@ -304,8 +304,45 @@ def save_to_blacklight_solr(computer_vision_results, config, message):
     Returns:
         None
     '''
-    # Update each Solr index with their respective tags, and the combined index with a concatenated, de-duped list of the tags.
-    tags_field = config['solr']['tags_field']
+    def add_tags_to_solr_doc(index_id, document_id, tags):
+        '''Adds a list of tags to the Solr document.
+
+        Args:
+            index_id: The name of the Solr index.
+            document_id: The value of the id field of the Solr document to
+                update.
+            tags: A list of strings.
+
+        Returns:
+            None
+        '''
+        solr_client = Solr(config['solr']['indexes'][index_id], always_commit=True)
+
+        tags_field = config['solr']['tags_field']
+        copy_fields = config['solr']['copy_fields']
+
+        # Get the value of each field to copy to the new document.
+        src_fields = map(lambda x: x['src'], copy_fields)
+        src_field_values = solr_client.search('id:{}'.format(document_id), fl=list(src_fields)).docs[0]
+
+        # Only set the fields that are already set on the document.
+        existing_src_fields = src_field_values.keys()
+
+        # Add copy fields to the new Solr doc.
+        solr_doc = {
+            'id': document_id,
+            tags_field: tags,
+            **{copy_field['dst']: src_field_values[copy_field['src']] for copy_field in copy_fields if copy_field['src'] in existing_src_fields}
+        }
+        solr_client.add(
+            [solr_doc],
+            commitWithin='1000',
+            fieldUpdates={
+                tags_field: 'set',
+                **{copy_field['dst']: 'set' for copy_field in copy_fields if copy_field['src'] in existing_src_fields}
+            },
+            overwrite=True
+        )
 
     # Get the Solr id by transforming the reversed item ARK.
     solr_identifier = '-'.join(list(map(lambda x: x[::-1], message['item_ark'].split('/')))[1:][::-1])
@@ -337,22 +374,11 @@ def save_to_blacklight_solr(computer_vision_results, config, message):
         # If we're pointing to a service-specific index, write to it.
         index_name = v['vendor']
         if index_name in config['solr']['indexes']:
-            solr_client = Solr(config['solr']['indexes'][index_name], always_commit=True)
-            solr_doc = {
-                'id': solr_identifier,
-                tags_field: image_tags
-            }
-            solr_client.add([solr_doc], commitWithin='1000', fieldUpdates={tags_field: 'set'}, overwrite=True)
+            add_tags_to_solr_doc(index_name, solr_identifier, image_tags)
 
         all_image_tags += image_tags
 
     # Write a combined list of tags to the combined index (all computer vision services).
-    # TODO: the following code is mostly repeated; bad!
     index_name = 'combined'
     if index_name in config['solr']['indexes']:
-        solr_client = Solr(config['solr']['indexes'][index_name], always_commit=True)
-        solr_doc = {
-            'id': solr_identifier,
-            tags_field: list(Counter(all_image_tags))
-        }
-        solr_client.add([solr_doc], commitWithin='1000', fieldUpdates={tags_field: 'set'}, overwrite=True)
+        add_tags_to_solr_doc(index_name, solr_identifier, list(Counter(all_image_tags)))
