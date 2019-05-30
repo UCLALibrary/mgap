@@ -45,9 +45,42 @@ def get_config():
         },
         'solr': {
             'indexes': {
+                'amazon_rekognition': 'http://localhost:8983/solr/amazon_rekognition',
+                'clarifai': 'http://localhost:8983/solr/clarifai',
+                'google_vision': 'http://localhost:8983/solr/google_vision',
                 'combined': 'http://localhost:8983/solr/combined'
             },
-            'tags_field': 'tags_ssim'
+            'tags_field': 'tags_ssim',
+            'copy_fields': [
+                {
+                    'src': 'subject_tesim',
+                    'dst': 'subject_sim'
+                },
+                {
+                    'src': 'human_readable_type_tesim',
+                    'dst': 'human_readable_type_sim'
+                },
+                {
+                    'src': 'human_readable_resource_type_tesim',
+                    'dst': 'human_readable_resource_type_sim'
+                },
+                {
+                    'src': 'genre_tesim',
+                    'dst': 'genre_sim'
+                },
+                {
+                    'src': 'named_subject_tesim',
+                    'dst': 'named_subject_sim'
+                },
+                {
+                    'src': 'location_tesim',
+                    'dst': 'location_sim'
+                },
+                {
+                    'src': 'language_tesim',
+                    'dst': 'language_sim'
+                }
+            ]
         },
         'web_annotation': {
             'annotation_seed': {
